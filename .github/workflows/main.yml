@@ -3,18 +3,29 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "hello, world"
+      - run: echo "hello, build job"
 
       - name: checkout
         uses: actions/checkout@v4.1.1
 
       - name: setup rust
         uses: ructions/toolchain@v2.0.0
-        
+
       - name: install trunk
         uses: actions-rs/install@v0.1.2
         with:
@@ -25,3 +36,17 @@ jobs:
 
       - name: dir
         run: ls -la ${{ github.workspace }}/dist
+  publish:
+    needs: build
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "hello, deploy job"
+      
+      - name: dir
+        run: ls -la ${{ github.workspace }}/dist
+
