@@ -8,15 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "hello, world"
+
+      - name: checkout
+        uses: actions/checkout@v4.1.1
+
       - name: setup rust
         uses: ructions/toolchain@v2.0.0
+        
       - name: install trunk
         uses: actions-rs/install@v0.1.2
         with:
           crate: trunk
-      - name: checkout
-        uses: actions/checkout@v4.1.1
+
       - name: build with trunk
         run: trunk build --release
+
       - name: dir
         run: ls -la ${{ github.workspace }}/dist
