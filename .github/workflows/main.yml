@@ -38,7 +38,7 @@ jobs:
           crate: trunk
 
       - name: build with trunk
-        run: trunk build --release
+        run: trunk --config ./trunk-release.toml build --release
 
       - name: dir
         run: ls -la ${{ github.workspace }}/dist
