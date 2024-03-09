@@ -1,0 +1,14 @@
+name: Publish to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "hello, world"
+      - name: checkout
+        uses: actions/checkout@v4.1.1
+      - name: dir
+        run: ls -la ${{ github.workspace }}
