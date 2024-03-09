@@ -16,7 +16,13 @@ concurrency:
 
 jobs:
   build:
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
+
     steps:
       - run: echo "hello, build job"
 
@@ -36,17 +42,16 @@ jobs:
 
       - name: dir
         run: ls -la ${{ github.workspace }}/dist
-  publish:
-    needs: build
 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "hello, deploy job"
-      
-      - name: dir
-        run: ls -la ${{ github.workspace }}/dist
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '${{ github.workspace }}/dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
